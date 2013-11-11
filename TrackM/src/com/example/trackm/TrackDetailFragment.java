@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class TrackDetailFragment extends Fragment {
 	
@@ -15,6 +16,14 @@ public class TrackDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		view = inflater.inflate(R.layout.fragment_layout, container, false);
+		
+		TextView info = (TextView)view.findViewById(R.id.info_text);
+		
+		Bundle bundleInfo = this.getArguments();
+		int position = bundleInfo.getInt("position");
+		
+		String[] trackDetails = getActivity().getResources().getStringArray(R.array.track_info_array);
+		info.setText(trackDetails[position]);
 		
 		return view;
 	}

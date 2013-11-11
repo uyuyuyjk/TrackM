@@ -10,9 +10,9 @@
 	
 	<string-array name="track_info_array">
 	    
-	    <item>1\ hip pop\ korean\ 3.5mb </item>
-	    <item>2\ hip pop\ korean\ 6.5mb </item>
-	    <item>3\ hip pop\ korean\ 4.2mb</item>
+	    <item> 1\n hip pop\n korean\n 3.5mb </item>
+	    <item> 2\n hip pop\n korean\n 6.5mb </item>
+	    <item> 3\n hip pop\n korean\n 4.2mb</item>
 	    
 	</string-array>    
 </resources>

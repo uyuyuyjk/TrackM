@@ -78,7 +78,7 @@ public class SecondActivity extends Activity {
 
 	public void openDetailInformation(){
 		Bundle element = new Bundle();
-		element.putInt("position", listView.getPositionForView(getView()));
+		element.putInt("position", 1);
 		Intent intent = new Intent(activity, TrackFragmentActivity.class);
 		intent.putExtra("bundle", element);
 		startActivity(intent);

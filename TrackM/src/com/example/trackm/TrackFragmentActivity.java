@@ -6,12 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
+
+
 public class TrackFragmentActivity extends FragmentActivity{
 
 	@Override
-	protected void onCreate(Bundle arg0) {
-		setContentView(findViewById(R.layout.fragment_layout));
-		super.onCreate(arg0);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.fragment_layout);
 		Intent intent = this.getIntent();
 		
 		Bundle element = intent.getBundleExtra("bundle");
@@ -21,7 +23,7 @@ public class TrackFragmentActivity extends FragmentActivity{
 		
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
-		transaction.replace(R.id.track_info_framelayout, trackDetail);
+		transaction.replace(R.id.frame, trackDetail);
 		transaction.commit();
 	}
 
