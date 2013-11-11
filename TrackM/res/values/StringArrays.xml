@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="track_array">
+	    
+	    <item>Genie </item>
+	    <item>Run devil run</item>
+	    <item>Oh!</item>
+	    
+	</string-array>    
+</resources>

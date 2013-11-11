@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">trackmanager</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+	<string name="track_library">&lt;Track Library</string>
+	<string name="buttons">View Library</string>
+	
+</resources>
