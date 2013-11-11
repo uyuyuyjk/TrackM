@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buttons"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <FrameLayout
+        android:id="@+id/track_info_framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </FrameLayout>
 
 </LinearLayout>

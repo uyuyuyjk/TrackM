@@ -10,6 +10,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 	
 	TextView textView;
+	Intent intent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +25,9 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	public void sendIntent(View view){
-		Intent intent = new Intent(this, SecondActivity.class);
+		intent = new Intent(this, SecondActivity.class);
 		startActivity(intent);
 	}
 }
