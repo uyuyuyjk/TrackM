@@ -3,12 +3,15 @@ package com.example.trackm;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -35,6 +38,7 @@ public class SecondActivity extends Activity {
 	private View view;
 	private int viewPosition;
 	private Cursor cursor;
+	private ProgressDialog progressDialog;
 	private static ArrayList<String> listDetail = new ArrayList<String>();
 
 	@Override
@@ -144,40 +148,69 @@ public class SecondActivity extends Activity {
 		String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
 		ContentResolver cr = activity.getContentResolver();
 		cursor = cr.query(allsongsuri, STAR, selection, null, null);
+		showProgressDialog();
+		
+		 new Thread(new Runnable() {  
+             @Override  
+             public void run() {  
+            	 if (cursor != null) {
+         			if (cursor.moveToFirst()) {
+         				do {
+         					String song_name = cursor
+         							.getString(cursor
+         									.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+         					track_array.add(song_name);
+         					int song_id = cursor.getInt(cursor
+         							.getColumnIndex(MediaStore.Audio.Media._ID));
 
-		if (cursor != null) {
-			if (cursor.moveToFirst()) {
-				do {
-					String song_name = cursor
-							.getString(cursor
-									.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
-					track_array.add(song_name);
-					int song_id = cursor.getInt(cursor
-							.getColumnIndex(MediaStore.Audio.Media._ID));
+         					String fullpath = cursor.getString(cursor
+         							.getColumnIndex(MediaStore.Audio.Media.DATA));
 
-					String fullpath = cursor.getString(cursor
-							.getColumnIndex(MediaStore.Audio.Media.DATA));
+         					String album_name = cursor.getString(cursor
+         							.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+         					int album_id = cursor.getInt(cursor
+         							.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
 
-					String album_name = cursor.getString(cursor
-							.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-					int album_id = cursor.getInt(cursor
-							.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+         					String artist_name = cursor.getString(cursor
+         							.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+         					int artist_id = cursor.getInt(cursor
+         							.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+         					
+         					listDetail.add("Name: " + song_name  + "\n\n" 
+         							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
+         							+ "Path: \n" + fullpath + "\n");
+         					
+         				} while (cursor.moveToNext());
+         				setListDetail(listDetail);
+         			}
+         			
+         			cursor.close();
+         		}
+            	  mHandler.sendEmptyMessage(0);
+             }  
+           
+         }).start(); 
+		
+		
+	}
+	
+	private Handler mHandler = new Handler(){
+	    public void handleMessage(Message msg)  
+	    {
+	        dismissProgressDialog(); 
+	    }
+	};
+	
+	private void showProgressDialog() { 
+	    progressDialog = new ProgressDialog(SecondActivity.this);
+	    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	    progressDialog.setMessage("Downloading files...");
+	    progressDialog.show();
+	}
 
-					String artist_name = cursor.getString(cursor
-							.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-					int artist_id = cursor.getInt(cursor
-							.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-					
-					listDetail.add("Name: " + song_name  + "\n\n" 
-							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
-							+ "Path: \n" + fullpath + "\n");
-					
-				} while (cursor.moveToNext());
-				setListDetail(listDetail);
-			}
-			
-			cursor.close();
-		}
+	private void dismissProgressDialog() {
+	    if(progressDialog != null)
+	        progressDialog.dismiss();
 	}
 
 	public static ArrayList<String> getListDetail() {
