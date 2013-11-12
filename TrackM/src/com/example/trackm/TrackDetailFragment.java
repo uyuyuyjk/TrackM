@@ -21,9 +21,8 @@ public class TrackDetailFragment extends Fragment {
 		
 		Bundle bundleInfo = this.getArguments();
 		int position = bundleInfo.getInt("position");
-		
-		String[] trackDetails = getActivity().getResources().getStringArray(R.array.track_info_array);
-		info.setText(trackDetails[position]);
+		String trackDetails = SecondActivity.getListDetail().get(position);
+		info.setText(trackDetails);
 		
 		return view;
 	}

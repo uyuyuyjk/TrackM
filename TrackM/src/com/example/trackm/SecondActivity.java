@@ -1,9 +1,15 @@
 package com.example.trackm;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -14,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,10 +29,13 @@ import android.widget.Toast;
 public class SecondActivity extends Activity {
 
 	private ListView listView;
-	private String[] track_array;
+	private ArrayList<String> track_array =  new ArrayList<String>();
 	private Activity activity;
 	private LayoutInflater inflater;
 	private View view;
+	private int viewPosition;
+	private Cursor cursor;
+	private static ArrayList<String> listDetail = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +46,9 @@ public class SecondActivity extends Activity {
 
 		setView(findViewById(R.layout.activity_seconday));
 		listView = (ListView)findViewById(R.id.listView);
-		track_array = this.getResources().getStringArray(R.array.track_array);
 
-		ArrayAdapter<String> adapter =  new ArrayAdapter<String>(this, R.layout.list_view_row, R.id.listText, track_array);
+		getAllSongsFromSDCARD();
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view_row, R.id.listText, track_array);
 
 		View header = inflater.inflate(R.layout.track_manager_header, null);
 
@@ -47,6 +57,7 @@ public class SecondActivity extends Activity {
 		listView.addHeaderView(header);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new ListClickHandler());
+		listView.setOnItemLongClickListener(new ListLongClickHandler());
 
 		registerForContextMenu(listView);
 	}
@@ -78,7 +89,7 @@ public class SecondActivity extends Activity {
 
 	public void openDetailInformation(){
 		Bundle element = new Bundle();
-		element.putInt("position", 1);
+		element.putInt("position", viewPosition);
 		Intent intent = new Intent(activity, TrackFragmentActivity.class);
 		intent.putExtra("bundle", element);
 		startActivity(intent);
@@ -96,6 +107,21 @@ public class SecondActivity extends Activity {
 		}
 
 	}
+	
+	private class ListLongClickHandler implements OnItemLongClickListener {
+		
+		
+		
+		@Override
+		public boolean onItemLongClick(AdapterView<?> adapter, View view,
+				int position, long arg3) {
+			
+			viewPosition = position - 1;
+			
+			return false;
+		}
+
+	}
 
 	private class ListClickHandler implements OnItemClickListener {
 
@@ -109,9 +135,60 @@ public class SecondActivity extends Activity {
 
 			Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
 		}
-
-
+		
 	}
+	
+	public void getAllSongsFromSDCARD() {
+		String[] STAR = { "*" };        
+		Uri allsongsuri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+		ContentResolver cr = activity.getContentResolver();
+		cursor = cr.query(allsongsuri, STAR, selection, null, null);
+
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				do {
+					String song_name = cursor
+							.getString(cursor
+									.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+					track_array.add(song_name);
+					int song_id = cursor.getInt(cursor
+							.getColumnIndex(MediaStore.Audio.Media._ID));
+
+					String fullpath = cursor.getString(cursor
+							.getColumnIndex(MediaStore.Audio.Media.DATA));
+
+					String album_name = cursor.getString(cursor
+							.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+					int album_id = cursor.getInt(cursor
+							.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+
+					String artist_name = cursor.getString(cursor
+							.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+					int artist_id = cursor.getInt(cursor
+							.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+					
+					listDetail.add("Name: " + song_name  + "\n\n" 
+							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
+							+ "Path: \n" + fullpath + "\n");
+					
+				} while (cursor.moveToNext());
+				setListDetail(listDetail);
+			}
+			
+			cursor.close();
+		}
+	}
+
+	public static ArrayList<String> getListDetail() {
+		return listDetail;
+	}
+
+
+	public static void setListDetail(ArrayList<String> detail) {
+		listDetail = detail;
+	}
+
 
 	public View getView() {
 		return view;
