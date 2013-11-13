@@ -6,10 +6,17 @@
     android:gravity="left" >
 
     <TextView
-        android:id="@+id/listText"
+        android:id="@+id/listText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Large Text"
+        android:text="@string/large_text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/listText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/small_text"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

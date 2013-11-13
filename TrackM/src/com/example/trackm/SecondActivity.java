@@ -1,6 +1,9 @@
 package com.example.trackm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -11,7 +14,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -24,22 +26,24 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class SecondActivity extends Activity {
 
 	private ListView listView;
-	private ArrayList<String> track_array =  new ArrayList<String>();
 	private Activity activity;
 	private LayoutInflater inflater;
 	private View view;
 	private int viewPosition;
 	private Cursor cursor;
 	private ProgressDialog progressDialog;
+	private List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 	private static ArrayList<String> listDetail = new ArrayList<String>();
+	private long MEGABYTE = 1024L * 1024L;
+	private Map<String, String> datum = new HashMap<String, String>(2);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +53,19 @@ public class SecondActivity extends Activity {
 		setContentView(R.layout.activity_seconday);
 
 		setView(findViewById(R.layout.activity_seconday));
+		
 		listView = (ListView)findViewById(R.id.listView);
 
 		getAllSongsFromSDCARD();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view_row, R.id.listText, track_array);
-
+		
+		SimpleAdapter sAdapter = new SimpleAdapter(this, data,  R.layout.list_view_row, 
+				new String[] {"title", "subtitle"}, new int[]{R.id.listText1, R.id.listText2}); 
 		View header = inflater.inflate(R.layout.track_manager_header, null);
 
 		header.setOnClickListener(new HeaderClickHandler());
 
 		listView.addHeaderView(header);
-		listView.setAdapter(adapter);
+		listView.setAdapter(sAdapter);
 		listView.setOnItemClickListener(new ListClickHandler());
 		listView.setOnItemLongClickListener(new ListLongClickHandler());
 
@@ -132,8 +138,7 @@ public class SecondActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int position,
 				long value) {
-			// TODO Auto-generated method stub
-			TextView textView = (TextView)view.findViewById(R.id.listText);
+			TextView textView = (TextView)view.findViewById(R.id.listText1);
 
 			String text = textView.getText().toString();
 
@@ -147,81 +152,99 @@ public class SecondActivity extends Activity {
 		Uri allsongsuri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 		String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
 		ContentResolver cr = activity.getContentResolver();
+
 		cursor = cr.query(allsongsuri, STAR, selection, null, null);
+		
+		final Handler mHandler = new Handler();
 		showProgressDialog();
 		
-		 new Thread(new Runnable() {  
-             @Override  
-             public void run() {  
+		new Thread(new Runnable() {  
+			@Override  
+             public void run() {           	 
             	 if (cursor != null) {
          			if (cursor.moveToFirst()) {
          				do {
+         					Log.i(this.getClass().getSimpleName(), "load");
          					String song_name = cursor
          							.getString(cursor
-         									.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
-         					track_array.add(song_name);
-         					int song_id = cursor.getInt(cursor
-         							.getColumnIndex(MediaStore.Audio.Media._ID));
+         									.getColumnIndex(MediaStore.Audio.Media.TITLE));         			
+//         					int song_id = cursor.getInt(cursor
+//         							.getColumnIndex(MediaStore.Audio.Media._ID));
 
          					String fullpath = cursor.getString(cursor
          							.getColumnIndex(MediaStore.Audio.Media.DATA));
 
          					String album_name = cursor.getString(cursor
          							.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-         					int album_id = cursor.getInt(cursor
-         							.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+//         					int album_id = cursor.getInt(cursor
+//         							.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
 
          					String artist_name = cursor.getString(cursor
          							.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-         					int artist_id = cursor.getInt(cursor
-         							.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+//         					int artist_id = cursor.getInt(cursor
+//         							.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
          					
-         					listDetail.add("Name: " + song_name  + "\n\n" 
-         							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
-         							+ "Path: \n" + fullpath + "\n");
+         					float sizeNumber = cursor.getInt(cursor
+         							.getColumnIndex(MediaStore.Audio.Media.SIZE));
+//         					String size = cursor.getString(cursor
+//         							.getColumnIndex(MediaStore.Audio.Media.SIZE));
          					
+         					float duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+         					Log.i(this.getClass().getSimpleName(), "load");
+         					if(trackFilterSuccess(sizeNumber, duration)){
+         						datum = new HashMap<String, String>(2);
+         						datum.put("title", song_name);
+             					datum.put("subtitle", artist_name);
+             					data.add(datum);
+             					
+             					listDetail.add("Name: " + song_name  + "\n\n" 
+             							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
+             							+ "Size: " + String.format("%.2f Mb", sizeNumber / MEGABYTE) + "\n\n" + "Path: \n" + fullpath + "\n");
+         					}					
+         					Log.i(this.getClass().getSimpleName(), "load");
          				} while (cursor.moveToNext());
-         				setListDetail(listDetail);
+         				
          			}
-         			
          			cursor.close();
          		}
-            	  mHandler.sendEmptyMessage(0);
+            	 dismissProgressDialog(mHandler);
              }  
            
-         }).start(); 
-		
+         }).start();
 		
 	}
 	
-	private Handler mHandler = new Handler(){
-	    public void handleMessage(Message msg)  
-	    {
-	        dismissProgressDialog(); 
-	    }
-	};
+	private boolean trackFilterSuccess(float size, float duration) {
+		boolean isValid = false;
+		
+		size = size / MEGABYTE;
+		
+		if(duration >= 60000 && size >= 1){
+			isValid = true;
+		} 
+		
+		return isValid;
+	}
 	
 	private void showProgressDialog() { 
 	    progressDialog = new ProgressDialog(SecondActivity.this);
 	    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	    progressDialog.setMessage("Downloading files...");
+	    progressDialog.setMessage("Loading...");
+	    progressDialog.getContext().setTheme(R.style.MyTransparentTheme);
 	    progressDialog.show();
 	}
 
-	private void dismissProgressDialog() {
-	    if(progressDialog != null)
-	        progressDialog.dismiss();
+	private void dismissProgressDialog(Handler handler) {
+		handler.postDelayed(new Runnable() {
+   		    public void run() {
+   		    	if(progressDialog != null)
+   			        progressDialog.dismiss();
+   		    }}, 3000);
 	}
 
-	public static ArrayList<String> getListDetail() {
+	public static ArrayList<String> getListDetail(){
 		return listDetail;
 	}
-
-
-	public static void setListDetail(ArrayList<String> detail) {
-		listDetail = detail;
-	}
-
 
 	public View getView() {
 		return view;
@@ -233,35 +256,30 @@ public class SecondActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		Log.i(this.getClass().getSimpleName(), "onDestroy");
 		super.onDestroy();
 	}
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		Log.i(this.getClass().getSimpleName(), "onPause");
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		Log.i(this.getClass().getSimpleName(), "onResume");
 		super.onResume();
 	}
 
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		Log.i(this.getClass().getSimpleName(), "onStart");
 		super.onStart();
 	}
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		Log.i(this.getClass().getSimpleName(), "onStop");
 		super.onStop();
 	}
