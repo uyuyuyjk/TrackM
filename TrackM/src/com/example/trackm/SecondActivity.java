@@ -42,6 +42,7 @@ public class SecondActivity extends Activity {
 	private ProgressDialog progressDialog;
 	private List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 	private static ArrayList<String> listDetail = new ArrayList<String>();
+	private ArrayList<String> songName = new ArrayList<String>();
 	private long MEGABYTE = 1024L * 1024L;
 	private Map<String, String> datum = new HashMap<String, String>(2);
 
@@ -77,6 +78,10 @@ public class SecondActivity extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		setView(v);
+		View infoHeader = (View)  inflater.inflate(R.layout.context_menu_header, null);
+		TextView headerView = (TextView) infoHeader.findViewById(R.id.menu_header);
+		headerView.setText("   " + songName.get(viewPosition));
+		menu.setHeaderView(infoHeader);
 		menu.add(0, 0, Menu.NONE, "Add to play list");
 		menu.add(0, 1, Menu.NONE, "Detail information");
 	}
@@ -196,7 +201,7 @@ public class SecondActivity extends Activity {
          						datum.put("title", song_name);
              					datum.put("subtitle", artist_name);
              					data.add(datum);
-             					
+             					songName.add(song_name);
              					listDetail.add("Name: " + song_name  + "\n\n" 
              							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
              							+ "Size: " + String.format("%.2f Mb", sizeNumber / MEGABYTE) + "\n\n" + "Path: \n" + fullpath + "\n");

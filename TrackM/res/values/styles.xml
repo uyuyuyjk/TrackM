@@ -29,4 +29,11 @@
         <item name="android:windowFrame">@null</item>
     </style>
     
+    <!-- Button1 - Ocean_Blue -->
+    <style name="button_text">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
 </resources>
