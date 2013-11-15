@@ -1,4 +1,4 @@
-package com.example.trackm;
+package com.example.trackm.tracklibrary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -30,6 +29,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.headerclicked.HeaderClickHandler;
+import com.example.trackm.R;
 
 public class SecondActivity extends Activity {
 
@@ -55,15 +57,15 @@ public class SecondActivity extends Activity {
 
 		setView(findViewById(R.layout.activity_seconday));
 		
-		listView = (ListView)findViewById(R.id.listView);
+		listView = (ListView)findViewById(R.id.track_listview);
 
 		getAllSongsFromSDCARD();
 		
 		SimpleAdapter sAdapter = new SimpleAdapter(this, data,  R.layout.list_view_row, 
 				new String[] {"title", "subtitle"}, new int[]{R.id.listText1, R.id.listText2}); 
-		View header = inflater.inflate(R.layout.track_manager_header, null);
+		View header = inflater.inflate(R.layout.main_menu_header, null);
 
-		header.setOnClickListener(new HeaderClickHandler());
+		header.setOnClickListener(new HeaderClickHandler(activity));
 
 		listView.addHeaderView(header);
 		listView.setAdapter(sAdapter);
@@ -110,18 +112,7 @@ public class SecondActivity extends Activity {
 		startActivity(intent);
 	}
 
-	private class HeaderClickHandler implements OnClickListener {
-
-		@Override
-		public void onClick(View arg0) {
-			sendIntent();
-		}
-
-		public void sendIntent(){
-			finish();
-		}
-
-	}
+	
 	
 	private class ListLongClickHandler implements OnItemLongClickListener {
 		
@@ -163,13 +154,12 @@ public class SecondActivity extends Activity {
 		final Handler mHandler = new Handler();
 		showProgressDialog();
 		
-		new Thread(new Runnable() {  
+		runOnUiThread(new Runnable() {  
 			@Override  
              public void run() {           	 
             	 if (cursor != null) {
          			if (cursor.moveToFirst()) {
          				do {
-         					Log.i(this.getClass().getSimpleName(), "load");
          					String song_name = cursor
          							.getString(cursor
          									.getColumnIndex(MediaStore.Audio.Media.TITLE));         			
@@ -206,7 +196,6 @@ public class SecondActivity extends Activity {
              							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
              							+ "Size: " + String.format("%.2f Mb", sizeNumber / MEGABYTE) + "\n\n" + "Path: \n" + fullpath + "\n");
          					}					
-         					Log.i(this.getClass().getSimpleName(), "load");
          				} while (cursor.moveToNext());
          				
          			}
@@ -215,7 +204,7 @@ public class SecondActivity extends Activity {
             	 dismissProgressDialog(mHandler);
              }  
            
-         }).start();
+         });
 		
 	}
 	
@@ -232,7 +221,7 @@ public class SecondActivity extends Activity {
 	}
 	
 	private void showProgressDialog() { 
-	    progressDialog = new ProgressDialog(SecondActivity.this);
+	    progressDialog = new ProgressDialog(SecondActivity.this, ProgressDialog.THEME_HOLO_DARK);
 	    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 	    progressDialog.setMessage("Loading...");
 	    progressDialog.getContext().setTheme(R.style.MyTransparentTheme);

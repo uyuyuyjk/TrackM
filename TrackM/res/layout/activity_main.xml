@@ -11,11 +11,11 @@
         android:id="@+id/button1"
         style="@style/button_text"
         android:layout_width="232dp"
-        android:layout_height="201dp"
+        android:layout_height="230dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="4dp"
         android:layout_toLeftOf="@+id/button3"
         android:background="@drawable/navy_blue"
         android:onClick="sendIntent"
@@ -23,15 +23,14 @@
     
     <Button
         android:id="@+id/button2"
-        style="@style/button_text" 
-        android:background="@drawable/tangerine"
+        style="@style/button_text"
         android:layout_width="121dp"
         android:layout_height="363dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/button4"
         android:layout_marginRight="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_below="@+id/button1"
+        android:background="@drawable/tangerine"
         android:text="@string/button2" />
     
     <Button
@@ -45,35 +44,37 @@
         android:layout_marginLeft="3dp"
         android:layout_marginBottom="2dp"
         android:background="@drawable/cyan"
+        android:onClick="sendIntent"
         android:text="@string/button3" />
 
     <ImageButton
         android:id="@+id/button4"
         style="@style/button_text"
-        android:background="@drawable/light_green"
         android:layout_width="116dp"
         android:layout_height="156dp"
         android:layout_alignLeft="@+id/button5"
-        android:layout_alignTop="@+id/button2"
-        android:layout_marginRight="1dp"
+        android:layout_below="@+id/button1"
         android:layout_marginBottom="2dp"
+        android:layout_marginRight="1dp"
         android:layout_toLeftOf="@+id/button3"
+        android:background="@drawable/light_green"
+        android:contentDescription="@string/button4"
         android:scaleType="centerInside"
-        android:text="@string/button4"
         android:src="@drawable/gear"
-        android:contentDescription="@string/button4"  />
+        android:text="@string/button4" />
     
     <Button
         android:id="@+id/button5"
         style="@style/button_text"
-        android:background="@drawable/light_purple"
         android:layout_width="241dp"
         android:layout_height="205dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/button4"
         android:layout_marginLeft="2dp"
         android:layout_marginTop="2dp"
-        android:layout_below="@+id/button4"
         android:layout_toRightOf="@+id/button2"
+        android:background="@drawable/light_purple"
         android:text="@string/button5" />
 
 </RelativeLayout >

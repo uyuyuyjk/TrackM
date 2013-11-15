@@ -3,7 +3,7 @@
     <string name="app_name">Smart Track</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-	<string name="track_library">&lt;Main menu</string>
+	<string name="main_menu">&lt;Main menu</string>
 	
 	<string name="large_text">Large Text</string>
 	<string name="small_text">Small Text</string><string name="menu_header">empty</string>
