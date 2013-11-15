@@ -11,6 +11,8 @@
 	
 	<string name="button4"></string>
 	<string name="button5">Movies</string>
+	<string name="checkbox_name">checkbox_name</string>
+	<string name="remove_item">remove</string>
 	
 	
 </resources>

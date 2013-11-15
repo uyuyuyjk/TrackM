@@ -29,6 +29,7 @@
         <activity android:name=".tracklibrary.SecondActivity"></activity>
         <activity android:name=".tracklibrary.TrackFragmentActivity"></activity>
         <activity android:name=".playlist.ThirdActivity"></activity>
+        <activity android:name=".playlist.remove.RemovePlaylistActivity" ></activity>
     </application>
 
 </manifest>

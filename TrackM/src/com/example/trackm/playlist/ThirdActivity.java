@@ -1,11 +1,13 @@
 package com.example.trackm.playlist;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.headerclicked.HeaderClickHandler;
 import com.example.trackm.R;
+import com.example.trackm.playlist.remove.RemovePlaylistActivity;
 
 public class ThirdActivity extends Activity{
 
@@ -43,7 +46,7 @@ public class ThirdActivity extends Activity{
 
 
 		SimpleAdapter sAdapter = new SimpleAdapter(this, data,  R.layout.list_view_row, 
-						new String[] {"title", "subtitle"}, new int[]{R.id.listText1, R.id.listText2}); 
+				new String[] {"title", "subtitle"}, new int[]{R.id.listText1, R.id.listText2}); 
 		View header = inflater.inflate(R.layout.main_menu_header, null);
 
 		header.setOnClickListener(new HeaderClickHandler(activity));
@@ -87,7 +90,9 @@ public class ThirdActivity extends Activity{
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		menu.add("New playlist").setIcon(R.drawable.new_playlist);
+		menu.add("Remove").setIcon(R.drawable.remove)
+		.setIntent(new Intent(this, RemovePlaylistActivity.class));
 		return true;
 	}
 
@@ -98,6 +103,6 @@ public class ThirdActivity extends Activity{
 	public void setView(View view) {
 		this.view = view;
 	}
-	
+
 
 }

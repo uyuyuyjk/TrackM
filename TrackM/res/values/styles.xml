@@ -5,7 +5,10 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     
-    <style name="GeneralNoTitle" parent="android:Theme.NoTitleBar">
+    <style name="GeneralNoTitle" parent="android:Theme.Holo.NoActionBar">
+	</style>
+    
+    <style name="ActionBar" parent="android:Theme.Holo">
 	</style>
     
     <style name="AppBaseTheme" parent="android:Theme.NoTitleBar">
