@@ -94,11 +94,11 @@ public class SecondActivity extends Activity {
 
 		switch(item.getItemId()){
 		case 0: Toast.makeText(activity,String.valueOf(item.getItemId()), Toast.LENGTH_SHORT).show();
-		break;
+			break;
 		case 1: openDetailInformation();				
-		break;
+			break;
 		default: Toast.makeText(activity, "empty", Toast.LENGTH_SHORT).show();
-		break;
+			break;
 		}
 
 		return true;

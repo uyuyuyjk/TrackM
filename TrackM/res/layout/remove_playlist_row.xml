@@ -13,8 +13,8 @@
         android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignBaseline="@+id/removeListView1"
+        android:layout_alignBottom="@+id/removeListView1"
         android:layout_alignParentRight="true" />
 
     <ImageView
@@ -28,7 +28,7 @@
         android:src="@drawable/music_note" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/removeListView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView1"
