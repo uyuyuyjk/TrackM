@@ -5,25 +5,24 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.example.headerclicked.HeaderClickHandler;
 import com.example.trackm.R;
 
 public class RemovePlaylistActivity extends Activity{
@@ -31,27 +30,27 @@ public class RemovePlaylistActivity extends Activity{
 	private RemovePlaylistActivity activity;
 	private LayoutInflater inflater;
 	private ListView listView;
-	private ArrayAdapter<String> sAdapter;
 	private ArrayList<String> playlist = new ArrayList<String>();
-	private CheckBox checkBox;
-
+	private CustomAdapter<String> customAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(R.style.ActionBar);
 		super.onCreate(savedInstanceState);
 		activity = this;
-		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
 		setContentView(R.layout.remove_playlist_activity);
+		
+		customAdapter = new CustomAdapter<String>(this, R.layout.playlist_list_view_row, playlist);
 		
 		listView = (ListView)findViewById(R.id.playlist_listview);
 		
-		sAdapter = new ArrayAdapter<String>(this, R.layout.remove_playlist_row, R.id.removeListView1, playlist); 
-
 		loadPlayList();
-		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		listView.setAdapter(sAdapter);
 		
+		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		listView.setAdapter(customAdapter);
+		listView.setMultiChoiceModeListener(new MultiChoiceListener());
+
 	}
 
 	@Override
@@ -61,39 +60,22 @@ public class RemovePlaylistActivity extends Activity{
 	    return super.onCreateOptionsMenu(menu);
 	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_remove:
-			removePlaylists();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-	
-	public void removePlaylists(){
+	public void removePlaylists(String name){
 		ContentResolver resolver = this.getContentResolver();
-		
-		for(int index = 0; index < sAdapter.getCount(); index ++){
-			//if the item is checked remove it from the mediastore db
-		}
-		
+
 	    Uri playlists = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
 	    Cursor c = resolver.query(playlists, new String[] {"*"}, null, null, null);
 	    if(c.moveToFirst()){
 	    	do {
 	    		String plname = c.getString(c.getColumnIndex(MediaStore.Audio.Playlists.NAME));
 	    		long playlistId = c.getLong(c.getColumnIndex(MediaStore.Audio.Playlists._ID));
-	    		//change required
-	    		notifyDataChanged();
-	    		
-	    		Log.v("Adapter", String.valueOf(sAdapter.hasStableIds()));
-	    		SparseBooleanArray array = listView.getCheckedItemPositions();
 
-//	    		playlist.remove(plname);
-//    			notifyDataChanged();
-//    			removeFromMediaStore(resolver, playlists, playlistId);
+	    		if(name.equals(plname)){
+	    			playlist.remove(plname);
+	    			notifyDataChanged();
+	    			removeFromMediaStore(resolver, playlists, playlistId);
+	    		}
+	    		
 	    	} while (c.moveToNext());
 	    }c.close();
 	}
@@ -120,6 +102,62 @@ public class RemovePlaylistActivity extends Activity{
 	}
 	
 	public void notifyDataChanged(){
-		sAdapter.notifyDataSetChanged();
+		customAdapter.notifyDataSetChanged();
+	}
+	
+	class MultiChoiceListener implements MultiChoiceModeListener{
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode mode,
+				int position, long id, boolean checked) {
+			// Capture total checked items
+			final int checkedCount = listView.getCheckedItemCount();
+			// Set the CAB title according to total checked items
+			mode.setTitle(checkedCount + " Selected");
+			// Calls toggleSelection method from ListViewAdapter Class
+			customAdapter.toggleSelection(position);
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_remove:
+				// Calls getSelectedIds method from ListViewAdapter Class
+				SparseBooleanArray selected = customAdapter
+				.getSelectedIds();
+				// Captures all selected ids with a loop
+				for (int i = (selected.size() - 1); i >= 0; i--) {
+					if (selected.valueAt(i)) {
+						String selecteditem = customAdapter
+								.getItem(selected.keyAt(i));
+						// Remove selected items following the ids
+						customAdapter.remove(selecteditem);
+						removePlaylists(selecteditem);
+					}
+				}
+				// Close CAB
+				mode.finish();
+				finish();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			 mode.getMenuInflater().inflate(R.menu.action_menu, menu);
+                return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode arg0) {
+			customAdapter.removeSelection();
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+			return false;
+		}
 	}
 }

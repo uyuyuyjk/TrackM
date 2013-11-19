@@ -50,7 +50,7 @@ public class ThirdActivity extends Activity{
 		activity = this;
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		setContentView(R.layout.activity_third);
-
+		Log.v("ThirdAct", "Start");
 		setView(findViewById(R.layout.activity_third));
 
 		listView = (ListView)findViewById(R.id.playlist_listview);
@@ -100,8 +100,7 @@ public class ThirdActivity extends Activity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, Menu.NONE, "New playlist").setIcon(R.drawable.new_playlist);
-		menu.add(0, 1, Menu.NONE,"Remove").setIcon(R.drawable.remove)
-		.setIntent(new Intent(this, RemovePlaylistActivity.class));
+		menu.add(0, 1, Menu.NONE,"Remove").setIcon(R.drawable.remove);
 		return true;
 	}
 
@@ -113,6 +112,7 @@ public class ThirdActivity extends Activity{
 			break;
 		case 1: Intent intent = new Intent(this, RemovePlaylistActivity.class);
 				startActivity(intent);
+				Log.v("ThirdAct", "Start");
 			break;
 		default:
 			break;
@@ -149,7 +149,7 @@ public class ThirdActivity extends Activity{
 	
 	public void loadPlayList(){
 		ContentResolver resolver = this.getContentResolver();
-
+		playlist = new ArrayList<String>();
 	    Uri playlists = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
 	    Cursor c = resolver.query(playlists, new String[] {"*"}, null, null, null);
 	    if(c.moveToFirst()){
@@ -211,6 +211,18 @@ public class ThirdActivity extends Activity{
         }
         notifyDataChanged();
 	}
+	
+//	public void refreshPlaylist(){
+//		ContentResolver resolver = this.getContentResolver();
+//	    Uri playlists = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
+//	    Cursor c = resolver.query(playlists, new String[] {"*"}, null, null, null);
+//	    if(c.moveToFirst()){
+//	    	do {
+//	    		String plname = c.getString(c.getColumnIndex(MediaStore.Audio.Playlists.NAME));
+//	    		notifyDataChanged();
+//	    	} while (c.moveToNext());
+//	    }c.close();
+//	}
 
     public static final String[] PROJECTION_PLAYLIST = new String[] {
         	MediaStore.Audio.Playlists._ID,
@@ -228,6 +240,18 @@ public class ThirdActivity extends Activity{
 	
 	public void notifyDataChanged(){
 		sAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.v("ThirdAct", "Restart");
+	}
+
+	@Override
+	protected void onStart() {
+		Log.i(this.getClass().getSimpleName(), "onStart");
+		super.onStart();
 	}
 
 

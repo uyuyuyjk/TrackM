@@ -47,6 +47,7 @@ public class SecondActivity extends Activity {
 	private ArrayList<String> songName = new ArrayList<String>();
 	private long MEGABYTE = 1024L * 1024L;
 	private Map<String, String> datum = new HashMap<String, String>(2);
+	private SimpleAdapter sAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class SecondActivity extends Activity {
 
 		getAllSongsFromSDCARD();
 		
-		SimpleAdapter sAdapter = new SimpleAdapter(this, data,  R.layout.list_view_row, 
+		sAdapter = new SimpleAdapter(this, data,  R.layout.list_view_row, 
 				new String[] {"title", "subtitle"}, new int[]{R.id.listText1, R.id.listText2}); 
 		View header = inflater.inflate(R.layout.main_menu_header, null);
 
@@ -115,9 +116,7 @@ public class SecondActivity extends Activity {
 	
 	
 	private class ListLongClickHandler implements OnItemLongClickListener {
-		
-		
-		
+	
 		@Override
 		public boolean onItemLongClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
@@ -201,6 +200,7 @@ public class SecondActivity extends Activity {
          			}
          			cursor.close();
          		}
+            	 sAdapter.notifyDataSetChanged();
             	 dismissProgressDialog(mHandler);
              }  
            
