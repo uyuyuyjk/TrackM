@@ -1,8 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item android:id="@+id/action_remove"
+     <item android:id="@+id/action_new"
+          android:icon="@drawable/new_playlist"
+          android:title="@string/new_item"
+          android:showAsAction="always" />
+     
+      <item android:id="@+id/action_remove"
           android:icon="@drawable/remove"
-          android:title="@string/action_settings"
-          android:showAsAction="ifRoom" />
-
+          android:title="@string/remove_item"
+          android:showAsAction="always" />
+    
 </menu>

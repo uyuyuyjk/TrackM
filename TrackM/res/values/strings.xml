@@ -13,6 +13,7 @@
 	<string name="button5">Movies</string>
 	<string name="checkbox_name">checkbox_name</string>
 	<string name="remove_item">remove</string>
+	<string name="new_item">new playlist</string>
 	
 	
 </resources>

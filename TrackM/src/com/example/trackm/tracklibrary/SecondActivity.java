@@ -60,10 +60,13 @@ public class SecondActivity extends Activity {
 		
 		listView = (ListView)findViewById(R.id.track_listview);
 
-		getAllSongsFromSDCARD();
+		
 		
 		sAdapter = new SimpleAdapter(this, data,  R.layout.list_view_row, 
 				new String[] {"title", "subtitle"}, new int[]{R.id.listText1, R.id.listText2}); 
+		
+		getAllSongsFromSDCARD();
+		
 		View header = inflater.inflate(R.layout.main_menu_header, null);
 
 		header.setOnClickListener(new HeaderClickHandler(activity));
@@ -194,13 +197,14 @@ public class SecondActivity extends Activity {
              					listDetail.add("Name: " + song_name  + "\n\n" 
              							+ "Album: " + album_name + "\n\n" + "Artist: " + artist_name + "\n\n" 
              							+ "Size: " + String.format("%.2f Mb", sizeNumber / MEGABYTE) + "\n\n" + "Path: \n" + fullpath + "\n");
+             					sAdapter.notifyDataSetChanged();
          					}					
          				} while (cursor.moveToNext());
-         				
+         				 
          			}
          			cursor.close();
          		}
-            	 sAdapter.notifyDataSetChanged();
+            	
             	 dismissProgressDialog(mHandler);
              }  
            
