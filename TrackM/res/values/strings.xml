@@ -14,6 +14,7 @@
 	<string name="checkbox_name">checkbox_name</string>
 	<string name="remove_item">remove</string>
 	<string name="new_item">new playlist</string>
+	<string name="confirm_item">confirm</string>
 	
 	
 </resources>

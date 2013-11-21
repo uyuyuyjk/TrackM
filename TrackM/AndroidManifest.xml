@@ -30,6 +30,8 @@
         <activity android:name=".tracklibrary.SecondActivity"></activity>
         <activity android:name=".tracklibrary.TrackFragmentActivity"></activity>
         <activity android:name=".playlist.ThirdActivity"></activity>
+        <activity android:name=".playlist.OpenPlaylist"></activity>
+        <activity android:name=".playlist.AddToPlaylist"></activity>
     </application>
 
 </manifest>

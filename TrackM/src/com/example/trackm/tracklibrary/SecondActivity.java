@@ -59,9 +59,7 @@ public class SecondActivity extends Activity {
 		setView(findViewById(R.layout.activity_seconday));
 		
 		listView = (ListView)findViewById(R.id.track_listview);
-
-		
-		
+	
 		sAdapter = new SimpleAdapter(this, data,  R.layout.list_view_row, 
 				new String[] {"title", "subtitle"}, new int[]{R.id.listText1, R.id.listText2}); 
 		
@@ -116,8 +114,6 @@ public class SecondActivity extends Activity {
 		startActivity(intent);
 	}
 
-	
-	
 	private class ListLongClickHandler implements OnItemLongClickListener {
 	
 		@Override
@@ -165,9 +161,9 @@ public class SecondActivity extends Activity {
          					String song_name = cursor
          							.getString(cursor
          									.getColumnIndex(MediaStore.Audio.Media.TITLE));         			
-//         					int song_id = cursor.getInt(cursor
-//         							.getColumnIndex(MediaStore.Audio.Media._ID));
-
+         					int song_id = cursor.getInt(cursor
+         							.getColumnIndex(MediaStore.Audio.Media._ID));
+         					Log.v("song_id", song_id+"");
          					String fullpath = cursor.getString(cursor
          							.getColumnIndex(MediaStore.Audio.Media.DATA));
 

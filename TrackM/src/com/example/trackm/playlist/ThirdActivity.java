@@ -10,6 +10,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,12 +81,10 @@ public class ThirdActivity extends Activity{
 		@Override
 		public boolean onItemLongClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-
 			viewPosition = position - 1;
 
 			return false;
 		}
-
 	}
 
 	private class ListClickHandler implements OnItemClickListener {
@@ -97,6 +96,10 @@ public class ThirdActivity extends Activity{
 			String text = textView.getText().toString();
 
 			Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
+			
+			Intent openPlaylist = new Intent(activity, OpenPlaylist.class);
+			openPlaylist.putExtra("playlistName", text);
+			startActivity(openPlaylist);
 		}
 	}
 
@@ -109,7 +112,6 @@ public class ThirdActivity extends Activity{
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
 		switch(item.getItemId()){
 		case R.id.action_new: newPlaylistDialog();
 			break;
@@ -197,14 +199,14 @@ public class ThirdActivity extends Activity{
 	public void loadPlayList(){
 		ContentResolver resolver = this.getContentResolver();
 	    Uri playlists = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
-	    Cursor c = resolver.query(playlists, new String[] {"*"}, null, null, null);
-	    if(c.moveToFirst()){
+	    Cursor cursor = resolver.query(playlists, new String[] {"*"}, null, null, null);
+	    if(cursor.moveToFirst()){
 	    	do {
-	    		String plname = c.getString(c.getColumnIndex(MediaStore.Audio.Playlists.NAME));
+	    		String plname = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Playlists.NAME));
 	    		playlist.add(plname);
 	    		notifyDataChanged();
-	    	} while (c.moveToNext());
-	    }c.close();
+	    	} while (cursor.moveToNext());
+	    }cursor.close();
 	}
 
 	public void createPlaylist(String pName) { 
