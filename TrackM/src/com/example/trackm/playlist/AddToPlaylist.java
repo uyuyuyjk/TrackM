@@ -31,6 +31,9 @@ import com.example.trackm.playlist.customAdapter.CustomAdapter;
 
 public class AddToPlaylist extends Activity{
 
+	private ArrayList<String> fulltrackList = new ArrayList<String>();
+	private ArrayList<Integer> audioIdList = new ArrayList<Integer>();
+	private ArrayList<Integer> newAudioId = new ArrayList<Integer>();
 	private ArrayList<String> trackList = new ArrayList<String>();
 	private ArrayList<String> artistList = new ArrayList<String>();
 	private ArrayList<String> newTrackElement = new ArrayList<String>();
@@ -55,7 +58,7 @@ public class AddToPlaylist extends Activity{
 		
 		listView = (ListView)findViewById(R.id.add_playlist_listview);
 		
-		customAdapter = new CustomAdapter<String>(this, R.layout.list_view_row, trackList);
+		customAdapter = new CustomAdapter<String>(this, R.layout.list_view_row, fulltrackList);
 		
 		loadAllSongs();
 		
@@ -101,18 +104,23 @@ public class AddToPlaylist extends Activity{
 		for (int i = (selected.size() - 1); i >= 0; i--) {
 			if (selected.valueAt(i)) {
 				String selecteditem = customAdapter.getItem(selected.keyAt(i));
-				newTrackElement.add(selecteditem);
-				addToPlaylist(artistList.get(i), trackList.get(i));
+				if(!trackList.contains(selecteditem)){
+					newTrackElement.add(selecteditem);
+					newAudioId.add(audioIdList.get(i));
+					addToPlaylist(artistList.get(i), fulltrackList.get(i), audioIdList.get(i));
+				}
 			}
 		}
 		
 		Intent intent = new Intent(this, OpenPlaylist.class);
 		intent.putExtra("newTrack", newTrackElement);
+		intent.putExtra("audioId", newAudioId);
 		setResult(1,intent);
 		finish();
 	}
 
-	public void addToPlaylist(String artistName, String title) {
+	public void addToPlaylist(String artistName, String title, int audioId) {
+		//do not add repetitive items
 		ContentResolver resolver = this.getContentResolver();
 		String[] cols = new String[] {
 				"count(*)" };
@@ -122,9 +130,15 @@ public class AddToPlaylist extends Activity{
 		final int base = cursor.getInt(0);
 		cursor.close();
 		ContentValues values = new ContentValues();
-		values.put(MediaStore.Audio.Playlists.Members.ARTIST, artistName);
-		values.put(MediaStore.Audio.Playlists.Members.TITLE, title);
+		values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, Integer.valueOf(base + audioId));
+		values.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, audioId);
+
 		resolver.insert(uri, values);
+		ContentValues values2 = new ContentValues();
+		values2.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, Integer.valueOf(base + audioId));
+		values2.put(MediaStore.Audio.Playlists.Members.TITLE, title);
+		resolver.insert(uri, values2);
+		
 	}
 	
 	private void loadAllSongs() {
@@ -146,16 +160,22 @@ public class AddToPlaylist extends Activity{
 
 					String artist_name = cursor.getString(cursor
 							.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-					
+
+					//call remove here to remove repetitive items
+					audioIdList.add(song_id);
 					artistList.add(artist_name);
-					trackList.add(song_name);
-					customAdapter.notifyDataSetChanged();
+					fulltrackList.add(song_name);
+					notifyDataSetChanged();
 
 				} while (cursor.moveToNext());
 				
 			}
 			cursor.close();
 		}
+	}
+	
+	public void notifyDataSetChanged(){
+		customAdapter.notifyDataSetChanged();
 	}
 
 }
