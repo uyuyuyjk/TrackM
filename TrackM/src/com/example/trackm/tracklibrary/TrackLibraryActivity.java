@@ -33,7 +33,7 @@ import android.widget.Toast;
 import com.example.headerclicked.HeaderClickHandler;
 import com.example.trackm.R;
 
-public class SecondActivity extends Activity {
+public class TrackLibraryActivity extends Activity {
 
 	private ListView listView;
 	private Activity activity;
@@ -54,9 +54,9 @@ public class SecondActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		activity = this;
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		setContentView(R.layout.activity_seconday);
+		setContentView(R.layout.activity_track_library);
 
-		setView(findViewById(R.layout.activity_seconday));
+		setView(findViewById(R.layout.activity_track_library));
 		
 		listView = (ListView)findViewById(R.id.track_listview);
 	
@@ -221,7 +221,7 @@ public class SecondActivity extends Activity {
 	}
 	
 	private void showProgressDialog() { 
-	    progressDialog = new ProgressDialog(SecondActivity.this, ProgressDialog.THEME_HOLO_DARK);
+	    progressDialog = new ProgressDialog(TrackLibraryActivity.this, ProgressDialog.THEME_HOLO_DARK);
 	    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 	    progressDialog.setMessage("Loading...");
 	    progressDialog.getContext().setTheme(R.style.MyTransparentTheme);

@@ -1,4 +1,4 @@
-package com.example.trackm.playlist.customAdapter;
+package com.example.trackm.customAdapter;
  
 import java.util.List;
 

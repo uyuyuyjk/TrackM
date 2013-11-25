@@ -23,8 +23,8 @@ import android.widget.ListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 
 import com.example.trackm.R;
-import com.example.trackm.playlist.ThirdActivity.MultiChoiceListener;
-import com.example.trackm.playlist.customAdapter.CustomAdapter;
+import com.example.trackm.customAdapter.CustomAdapter;
+import com.example.trackm.playlist.PlaylistActivity.MultiChoiceListener;
 
 public class OpenPlaylist extends Activity{
 

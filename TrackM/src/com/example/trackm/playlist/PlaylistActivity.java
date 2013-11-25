@@ -37,11 +37,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trackm.R;
-import com.example.trackm.playlist.customAdapter.CustomAdapter;
+import com.example.trackm.customAdapter.CustomAdapter;
 
-public class ThirdActivity extends Activity{
+public class PlaylistActivity extends Activity{
 
-	private ThirdActivity activity;
+	private PlaylistActivity activity;
 	private LayoutInflater inflater;
 	private ListView listView;
 	public int viewPosition;
@@ -58,9 +58,9 @@ public class ThirdActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		activity = this;
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		setContentView(R.layout.activity_third);
+		setContentView(R.layout.activity_playlist);
 		Log.v("ThirdAct", "Start");
-		setView(findViewById(R.layout.activity_third));
+		setView(findViewById(R.layout.activity_playlist));
 		
 		listView = (ListView)findViewById(R.id.playlist_listview);
 

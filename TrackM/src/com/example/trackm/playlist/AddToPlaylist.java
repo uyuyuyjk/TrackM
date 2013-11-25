@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trackm.R;
-import com.example.trackm.playlist.customAdapter.CustomAdapter;
+import com.example.trackm.customAdapter.CustomAdapter;
 
 public class AddToPlaylist extends Activity{
 

@@ -1,7 +1,7 @@
 package com.example.trackm;
 
-import com.example.trackm.playlist.ThirdActivity;
-import com.example.trackm.tracklibrary.SecondActivity;
+import com.example.trackm.playlist.PlaylistActivity;
+import com.example.trackm.tracklibrary.TrackLibraryActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,20 +22,13 @@ public class MainActivity extends Activity {
 		
 		setContentView(R.layout.activity_main);
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 
 	public void sendIntent(View view){
 		try {
 			switch(view.getId()){
-				case R.id.button1: intent = new Intent(this, SecondActivity.class);
+				case R.id.button1: intent = new Intent(this, TrackLibraryActivity.class);
 				break;
-				case R.id.button3: intent = new Intent(this, ThirdActivity.class);
+				case R.id.button3: intent = new Intent(this, PlaylistActivity.class);
 				break;
 				default :
 				break;

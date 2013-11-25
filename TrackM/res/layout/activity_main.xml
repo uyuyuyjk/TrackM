@@ -31,6 +31,7 @@
         android:layout_alignTop="@+id/button4"
         android:layout_marginRight="2dp"
         android:background="@drawable/tangerine"
+        android:onClick="sendIntent"
         android:text="@string/button2" />
     
     <Button
