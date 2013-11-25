@@ -15,6 +15,7 @@
 	<string name="remove_item">remove</string>
 	<string name="new_item">new playlist</string>
 	<string name="confirm_item">confirm</string>
+	<string name="image_label">image label</string>
 	
 	
 </resources>

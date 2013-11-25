@@ -1,6 +1,7 @@
 package com.example.trackm;
 
 import com.example.trackm.playlist.PlaylistActivity;
+import com.example.trackm.record.RecordActivity;
 import com.example.trackm.tracklibrary.TrackLibraryActivity;
 
 import android.app.Activity;
@@ -27,11 +28,13 @@ public class MainActivity extends Activity {
 		try {
 			switch(view.getId()){
 				case R.id.button1: intent = new Intent(this, TrackLibraryActivity.class);
-				break;
+					break;
+				case R.id.button2: intent = new Intent(this, RecordActivity.class);
+					break;
 				case R.id.button3: intent = new Intent(this, PlaylistActivity.class);
-				break;
+					break;
 				default :
-				break;
+					break;
 			}
 		} catch (IllegalStateException exception) {
 			Log.v("Exception", "Activity does not exist");

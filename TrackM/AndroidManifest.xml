@@ -32,6 +32,7 @@
         <activity android:name=".playlist.PlaylistActivity"></activity>
         <activity android:name=".playlist.OpenPlaylist"></activity>
         <activity android:name=".playlist.AddToPlaylist"></activity>
+        <activity android:name=".record.RecordActivity"></activity>
     </application>
 
 </manifest>
