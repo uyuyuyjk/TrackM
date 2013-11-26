@@ -1,12 +1,14 @@
 package com.example.trackm.record;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.View.DragShadowBuilder;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,12 +55,15 @@ public class ViewPagerAdapter extends PagerAdapter {
         // Capture position and set to the TextViews
         titleView.setText(title[position]);
         
-        titleView.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View view) {
-				Log.v("View", ((TextView)view).getText().toString());
-			}
-        });
+//        titleView.setOnClickListener(new OnClickListener(){
+//			@Override
+//			public void onClick(View view) {
+//				Log.v("View", ((TextView)view).getText().toString());
+//			}
+//        });
+        
+        titleView.setOnLongClickListener(new ChoiceTouchListener());
+        
 //         Locate the ImageView in viewpager_item.xml
 //        imgflag = (ImageView) itemView.findViewById(R.id.flag);
 //         Capture position and set to the ImageView
@@ -71,7 +76,6 @@ public class ViewPagerAdapter extends PagerAdapter {
     
     @Override
 	public float getPageWidth(int position) {
-		// TODO Auto-generated method stub
 		return super.getPageWidth(position) / 3;
 	}
 
@@ -82,4 +86,15 @@ public class ViewPagerAdapter extends PagerAdapter {
  
     }
 	
+	private final class ChoiceTouchListener implements OnLongClickListener {
+		@Override
+		public boolean onLongClick(View view) {
+				Log.v("touch", "touch");
+				ClipData data = ClipData.newPlainText("", "");
+				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+				//start dragging the item touched
+				view.startDrag(data, shadowBuilder, view, 0);
+				return true;
+		}
+	} 
 }
