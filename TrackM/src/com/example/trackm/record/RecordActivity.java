@@ -1,10 +1,10 @@
 package com.example.trackm.record;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.ArcShape;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -28,6 +28,7 @@ public class RecordActivity extends Activity {
 	String[] country;
 	String[] population;
 	int[] title;
+	private ArrayList<ImageView> imageViewList = new ArrayList<ImageView>();
 	private GestureDetector tapGestureDetector;
 
 	@Override
@@ -39,6 +40,13 @@ public class RecordActivity extends Activity {
 		
 		ImageView imageView = (ImageView)findViewById(R.id.record_image);
 		
+		TextView text = (TextView) findViewById(R.id.scrolling_text);
+		
+		text.setText("pojfskljfsdklfdjfkklfjsfkljlfjfkljsfkljsf");
+		text.setSelected(true);
+		
+		initImageViews();
+		
 		// Locate the ViewPager in viewpager_main.xml
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		// Pass results to ViewPagerAdapter Class
@@ -48,7 +56,7 @@ public class RecordActivity extends Activity {
 
 		tapGestureDetector = new GestureDetector(this, new TapGestureListener());
 
-		imageView.setOnDragListener(new ChoiceDragListener());
+//		imageView.setOnDragListener(new ChoiceDragListener());
 		
 		viewPager.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -59,6 +67,17 @@ public class RecordActivity extends Activity {
 		});
 	}
 
+	private void initImageViews() {
+		imageViewList.add((ImageView)findViewById(R.id.slice1));
+		imageViewList.add((ImageView)findViewById(R.id.slice2));
+		imageViewList.add((ImageView)findViewById(R.id.slice3));
+		
+		for(ImageView image : imageViewList){
+			image.setAlpha(0f);
+			image.setOnDragListener(new ChoiceDragListener());
+		}
+	}
+
 	private class TapGestureListener extends GestureDetector.SimpleOnGestureListener{
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -67,33 +86,34 @@ public class RecordActivity extends Activity {
 		}
 	}
 
-
 	@SuppressLint("NewApi")
 	private class ChoiceDragListener implements OnDragListener {
 
 		@Override
 		public boolean onDrag(View v, DragEvent event) {
+			ImageView dropTarget = (ImageView) v;
 			switch (event.getAction()) {
 			case DragEvent.ACTION_DRAG_STARTED:
 				Log.v("drag", "start");
 				//no action necessary
 				break;
 			case DragEvent.ACTION_DRAG_ENTERED:
-				//no action necessary
+				dropTarget.setAlpha(0.2f);
 				break;
 			case DragEvent.ACTION_DRAG_EXITED:        
-				//no action necessary
+				dropTarget.setAlpha(0f);
 				break;
 			case DragEvent.ACTION_DROP:
 
 				//handle the dragged view being dropped over a drop view
 				View view = (View) event.getLocalState();
 				//view dragged item is being dropped on
-				ImageView dropTarget = (ImageView) v;
 				//view being dragged and dropped
 				TextView dropped = (TextView) view;
 			
 				Log.v("changed", dropped.getText().toString());
+				dropTarget.setBackgroundColor(Color.BLUE);
+				dropTarget.setAlpha(1.0f);
 				
 				Log.v("action drop", "drop");
 				break;

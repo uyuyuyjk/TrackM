@@ -9,13 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".record.RecordActivity" >
 
-    <ImageView
+   <ImageView
         android:id="@+id/record_image"
         android:layout_width="wrap_content"
         android:layout_height="300dp"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/scrolling_text"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/cd_template" />
+        android:src="@drawable/cd_template"
+        android:contentDescription="@string/large_text"/>
 
    <android.support.v4.view.ViewPager
        android:id="@+id/pager"
@@ -23,9 +24,49 @@
        android:layout_height="120dp"
        android:layout_alignParentBottom="true"
        android:layout_alignParentLeft="true"
-       android:layout_alignParentRight="true" 
-       android:background="#4F65F2"  >
+       android:layout_alignParentRight="true"
+       android:background="#4F65F2"  />
 
-   </android.support.v4.view.ViewPager>
+   <TextView
+       android:id="@+id/scrolling_text"
+       android:layout_width="150dp"
+       android:layout_height="wrap_content"
+       android:layout_alignParentTop="true"
+       android:layout_centerHorizontal="true"
+       android:layout_marginBottom="16dp"
+       android:ellipsize="marquee"
+       android:focusable="true"
+       android:focusableInTouchMode="true"
+       android:marqueeRepeatLimit="marquee_forever"
+       android:scrollHorizontally="true"
+       android:singleLine="true"
+       android:text="@string/large_text"
+       android:textAppearance="?android:attr/textAppearanceLarge" />
+
+   <ImageView
+       android:id="@+id/slice3"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignTop="@+id/slice1"
+       android:layout_toLeftOf="@+id/scrolling_text"
+       android:src="@drawable/add" />
+
+   <ImageView
+       android:id="@+id/slice2"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignBottom="@+id/record_image"
+       android:layout_centerHorizontal="true"
+       android:layout_marginBottom="29dp"
+       android:src="@drawable/add" />
+
+   <ImageView
+       android:id="@+id/slice1"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_above="@+id/slice2"
+       android:layout_marginBottom="42dp"
+       android:layout_toRightOf="@+id/scrolling_text"
+       android:src="@drawable/add" />
  
 </RelativeLayout>
